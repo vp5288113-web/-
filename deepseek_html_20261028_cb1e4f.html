@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Калькулятор стоимости прицепа</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: Arial, Helvetica, sans-serif; max-width: 760px; margin: 30px auto; padding: 0 16px; color: #222; }
+  h1 { font-size: 22px; margin-bottom: 4px; }
+  .sub { color: #777; font-size: 13px; margin-bottom: 20px; }
+  label { display: block; margin-top: 16px; font-weight: bold; font-size: 14px; }
+  select { width: 100%; padding: 9px; margin-top: 5px; font-size: 14px; border: 1px solid #bbb; border-radius: 6px; background: #fff; }
+  select:disabled { background: #eee; color: #999; }
+  .result { margin-top: 26px; padding: 18px; background: #f5f5f5; border-radius: 10px; }
+  .row { display: flex; justify-content: space-between; margin: 7px 0; font-size: 15px; }
+  .row span:last-child { font-variant-numeric: tabular-nums; }
+  .total { font-weight: bold; font-size: 17px; border-top: 1px solid #ccc; padding-top: 9px; margin-top: 9px; }
+  .grand { color: #0a6b2e; }
+  .hint { color: #777; font-size: 12px; margin-top: 14px; line-height: 1.5; }
+  .badge { display: inline-block; background: #e8f5e9; color: #0a6b2e; font-size: 11px; padding: 1px 7px; border-radius: 10px; margin-left: 6px; vertical-align: middle; }
+</style>
+</head>
+<body>
+
+<h1>Калькулятор стоимости прицепа</h1>
+<div class="sub">Выберите прицеп — комплект «каркас+тент» отфильтруется по совместимости.</div>
+
+<label for="trailer">Прицеп</label>
+<select id="trailer">
+  <option value="">— выберите прицеп —</option>
+  <option data-price="2607" data-assembly="57" data-delivery="150" data-model="start-a1812">Прицеп Старт А1812 (борт 320)</option>
+  <option data-price="2874" data-assembly="62" data-delivery="150" data-model="start-a2012">Прицеп Старт А2012 (борт 320)</option>
+  <option data-price="3010" data-assembly="65" data-delivery="150" data-model="start-a2512">Прицеп Старт А2512 (борт 320)</option>
+  <option data-price="3372" data-assembly="72" data-delivery="150" data-model="start-a2515">Прицеп Старт А2515 (борт 320)</option>
+  <option data-price="4572" data-assembly="97" data-delivery="150" data-model="start-2-s2515">Прицеп Старт-2 С2515 (борт 320)</option>
+  <option data-price="4982" data-assembly="100" data-delivery="150" data-model="start-2-s3015">Прицеп Старт-2 С3015 (борт 320)</option>
+  <option data-price="5272" data-assembly="100" data-delivery="150" data-model="start-2-s3515">Прицеп Старт-2 С3515 (борт 320)</option>
+
+  <option data-price="1972" data-assembly="44" data-delivery="150" data-model="viking1217">Прицеп Викинг 1217 ВБ Light Pro</option>
+  <option data-price="1855" data-assembly="41" data-delivery="150" data-model="viking1217">Прицеп Викинг 1217 Light Pro</option>
+  <option data-price="2353" data-assembly="52" data-delivery="150" data-model="viking1220">Прицеп Викинг 1220 Ал-Ко Light Pro New</option>
+  <option data-price="2484" data-assembly="54" data-delivery="150" data-model="viking1220">Прицеп Викинг 1220 Ал-Ко Light Pro New ВБ</option>
+  <option data-price="2581" data-assembly="56" data-delivery="150" data-model="viking1222">Прицеп Викинг 1222 Ал-Ко Light Pro New</option>
+  <option data-price="2699" data-assembly="59" data-delivery="150" data-model="viking1222">Прицеп Викинг 1222 Ал-Ко Light Pro New ВБ</option>
+  <option data-price="2726" data-assembly="59" data-delivery="150" data-model="viking1225">Прицеп Викинг 1225 Ал-Ко Light Pro New</option>
+  <option data-price="2838" data-assembly="61" data-delivery="150" data-model="viking1225">Прицеп Викинг 1225 Ал-Ко Light Pro New ВБ</option>
+  <option data-price="2770" data-assembly="60" data-delivery="150" data-model="viking1320">Прицеп Викинг 1320 Ал-Ко ВБ R13</option>
+  <option data-price="2626" data-assembly="57" data-delivery="150" data-model="viking1320">Прицеп Викинг 1320 Ал-Ко R13</option>
+  <option data-price="2860" data-assembly="62" data-delivery="150" data-model="viking1322">Прицеп Викинг 1322 Ал-Ко ВБ R13</option>
+  <option data-price="2733" data-assembly="59" data-delivery="150" data-model="viking1322">Прицеп Викинг 1322 Ал-Ко R13</option>
+  <option data-price="3188" data-assembly="69" data-delivery="150" data-model="viking1325">Прицеп Викинг 1325 Ал-Ко ВБ R13</option>
+  <option data-price="2954" data-assembly="64" data-delivery="150" data-model="viking1325">Прицеп Викинг 1325 Ал-Ко R13</option>
+  <option data-price="3107" data-assembly="67" data-delivery="150" data-model="viking1327">Прицеп Викинг 1327 TR R13</option>
+  <option data-price="3459" data-assembly="74" data-delivery="150" data-model="viking1525">Прицеп Викинг 1525 TR R13</option>
+  <option data-price="4514" data-assembly="96" data-delivery="150" data-model="viking1525">Прицеп Викинг 1525 X2 R13</option>
+  <option data-price="3802" data-assembly="81" data-delivery="150" data-model="viking1530">Прицеп Викинг 1530 TR R13</option>
+  <option data-price="4741" data-assembly="100" data-delivery="150" data-model="viking1530">Прицеп Викинг 1530 X2 R13</option>
+  <option data-price="3543" data-assembly="76" data-delivery="150" data-model="viking1535">Прицеп Викинг 1535 TR R13</option>
+  <option data-price="5002" data-assembly="100" data-delivery="150" data-model="viking1535">Прицеп Викинг 1535 X2 R13</option>
+  <option data-price="2436" data-assembly="53" data-delivery="150" data-model="viking1640">Прицеп Викинг 1640 L ПВХ</option>
+  <option data-price="5816" data-assembly="100" data-delivery="150" data-model="viking1835">Прицеп Викинг 1835 X2 R13</option>
+  <option data-price="6116" data-assembly="100" data-delivery="150" data-model="viking2035">Прицеп Викинг 2035 X2 R13</option>
+
+  <option data-price="3343" data-assembly="72" data-delivery="150" data-model="mw1320">Прицеп MW 1320 PRO (сборный)</option>
+  <option data-price="3354" data-assembly="72" data-delivery="150" data-model="mw1322">Прицеп MW 1322 PRO (сборный)</option>
+  <option data-price="3362" data-assembly="72" data-delivery="150" data-model="mw1325">Прицеп MW 1325 PRO (сборный)</option>
+  <option data-price="3557" data-assembly="76" data-delivery="150" data-model="mw1327">Прицеп MW 1327 PRO (сборный)</option>
+  <option data-price="5034" data-assembly="100" data-delivery="150" data-model="mw1327">Прицеп MW 1327 X2 PRO (сборный)</option>
+  <option data-price="3971" data-assembly="85" data-delivery="150" data-model="mw1525">Прицеп MW 1525 PRO (сборный)</option>
+  <option data-price="5071" data-assembly="100" data-delivery="150" data-model="mw1525">Прицеп MW 1525 X2 PRO (сборный)</option>
+  <option data-price="4043" data-assembly="86" data-delivery="150" data-model="mw1530">Прицеп MW 1530 PRO (сборный)</option>
+  <option data-price="5306" data-assembly="100" data-delivery="150" data-model="mw1530">Прицеп MW 1530 X2 PRO (сборный)</option>
+  <option data-price="5430" data-assembly="100" data-delivery="150" data-model="mw1535">Прицеп MW 1535 X2 PRO (сборный)</option>
+  <option data-price="6445" data-assembly="100" data-delivery="150" data-model="mw1636">Прицеп MW 1636</option>
+  <option data-price="7064" data-assembly="100" data-delivery="150" data-model="mw1636">Прицеп MW 1636 X2</option>
+  <option data-price="7062" data-assembly="100" data-delivery="150" data-model="mw2035">Прицеп MW 2035 X2 PLAT</option>
+
+  <option data-price="2739" data-assembly="59" data-delivery="150" data-model="rinal1325">Прицеп RINAL LITE 13.25 (01) AL-KO R13 (ЦИНК) новый</option>
+  <option data-price="2052" data-assembly="45" data-delivery="150" data-model="rinal1217">Прицеп RINAL OPTIMA (00) 12.17 AL-KO 3л (ЦИНК)</option>
+</select>
+
+<label for="tentKit">Комплект «каркас+тент» <span id="kitCount" class="badge">0</span></label>
+<select id="tentKit">
+  <option value="">— без комплекта —</option>
+</select>
+
+<label for="tentOnly">Тент отдельно (если каркас и тент — разные позиции)</label>
+<select id="tentOnly">
+  <option value="">— без тента —</option>
+  <option data-price="108" data-assembly="10" data-models="start-a1812">Тент ПВХ (630г/м2) 1220*1800*500 (Старт А1812)</option>
+  <option data-price="92" data-assembly="10" data-models="start-a2012">Тент ПВХ (630г/м2) 1220*2000*0 (полог, сварной) (Старт А2012)</option>
+  <option data-price="144" data-assembly="10" data-models="start-a2512">Тент ПВХ (630г/м2) 1220*2500*500 (Старт А2512)</option>
+  <option data-price="320" data-assembly="10" data-models="start-a2515">Тент ПВХ (630г/м2) 1500*2500*1000 прямоугольный (Старт А2515)</option>
+  <option data-price="431" data-assembly="10" data-models="start-2-s2515">Тент ПВХ (630г/м2) 1500*2500*1500 прямоугольный (Старт-2 С2515)</option>
+  <option data-price="506" data-assembly="11" data-models="start-2-s3015">Тент ПВХ (630г/м2) 1500*3000*1500 прямоугольный (Старт-2 С3015)</option>
+  <option data-price="529" data-assembly="11" data-models="start-2-s3515">Тент ПВХ (630г/м2) 1500*3500*1500 прямоугольный (Старт-2 С3515)</option>
+  <option data-price="98" data-assembly="10" data-models="viking1217">Тент Викинг 1217 (полог) комплект</option>
+</select>
+
+<div class="result">
+  <div class="row"><span>Прицеп</span><span><b id="priceTrailer">0</b> BYN</span></div>
+  <div class="row"><span>Каркас+тент (комплект)</span><span><b id="priceKit">0</b> BYN</span></div>
+  <div class="row"><span>Тент отдельно</span><span><b id="priceTentOnly">0</b> BYN</span></div>
+  <div class="row total"><span>Итого (товары)</span><span><b id="totalGoods">0</b> BYN</span></div>
+  <div class="row"><span>Сборка</span><span><b id="assembly">0</b> BYN</span></div>
+  <div class="row"><span>Доставка</span><span><b id="delivery">0</b> BYN</span></div>
+  <div class="row total grand"><span>Всего со сборкой и доставкой</span><span><b id="grandTotal">0</b> BYN</span></div>
+</div>
+
+<p class="hint">Сборка и доставка показаны отдельно и не входят в «Итого (товары)». Доставка берётся по строке прицепа. Комплекты «каркас+тент» фильтруются по совместимости с выбранным прицепом. Позиции без цены отмечены как «цена по запросу».</p>
+
+<script>
+function num(v){ return parseFloat(v) || 0; }
+function money(v){ return v.toFixed(2).replace('.', ','); }
+
+const trailerSel = document.getElementById('trailer');
+const kitSel = document.getElementById('tentKit');
+const tentOnlySel = document.getElementById('tentOnly');
+const kitCount = document.getElementById('kitCount');
+
+// Все комплекты «каркас+тент» с привязкой к моделям прицепов.
+// Цены — из прайса; где цены нет, стоит price:null (показывается «цена по запросу»).
+const ALL_KITS = [
+  // Старт
+  { name: 'Комплект каркас тента 1220*2000*500 (Старт А1812/А2012)', price: 71, assembly: 10, models: ['start-a1812','start-a2012'] },
+  { name: 'Комплект каркас тента 1220*2500*500 (Старт А2512)', price: 127, assembly: 10, models: ['start-a2512'] },
+  { name: 'Комплект каркас тента 1500*2500*1000 прямоугольный (Старт А2515)', price: 330, assembly: 10, models: ['start-a2515'] },
+  { name: 'Комплект каркас тента 1500*2500*1500 прямоугольный (Старт-2 С2515)', price: 459, assembly: 10, models: ['start-2-s2515'] },
+  { name: 'Комплект каркас тента 1500*3000*1500 прямоугольный (Старт-2 С3015)', price: 436, assembly: 10, models: ['start-2-s3015'] },
+  { name: 'Комплект каркас тента 1500*3500*1500 прямоугольный (Старт-2 С3515)', price: 688, assembly: 15, models: ['start-2-s3515'] },
+
+  // RINAL
+  { name: 'Каркас+Тент RINAL 1325 h=350', price: null, assembly: 0, models: ['rinal1325'] },
+
+  // MW
+  { name: 'Каркас+Тент MW 1320 h=300', price: 475, assembly: 10, models: ['mw1320'] },
+  { name: 'Каркас+Тент MW 1320 h=700', price: 612, assembly: 13, models: ['mw1320'] },
+  { name: 'Каркас+Тент MW 1322 h=300', price: 491, assembly: 11, models: ['mw1322'] },
+  { name: 'Каркас+Тент MW 1322 h=700', price: 606, assembly: 13, models: ['mw1322'] },
+  { name: 'Каркас+Тент MW 1322 h=800', price: 675, assembly: 14, models: ['mw1322'] },
+  { name: 'Каркас+Тент MW 1325 h=700', price: 628, assembly: 13, models: ['mw1325'] },
+  { name: 'Каркас+Тент MW 1325 h=800', price: 695, assembly: 15, models: ['mw1325'] },
+  { name: 'Каркас+Тент MW 1325 h=1000', price: 785, assembly: 17, models: ['mw1325'] },
+  { name: 'Каркас+Тент MW 1327 h=800', price: 765, assembly: 16, models: ['mw1327'] },
+  { name: 'Каркас+Тент MW 1327 h=1000', price: 842, assembly: 18, models: ['mw1327'] },
+  { name: 'Каркас+Тент MW 1327 h=1200', price: 887, assembly: 19, models: ['mw1327'] },
+  { name: 'Каркас+Тент MW 1525 h=1000', price: 864, assembly: 18, models: ['mw1525'] },
+  { name: 'Каркас+Тент MW 1525 h=1200', price: 918, assembly: 19, models: ['mw1525'] },
+  { name: 'Каркас+Тент MW 1530 h=1000', price: 889, assembly: 19, models: ['mw1530'] },
+  { name: 'Каркас+Тент MW 1530 h=1200', price: 979, assembly: 20, models: ['mw1530'] },
+  { name: 'Каркас+Тент MW 1535 h=1000', price: 1075, assembly: 22, models: ['mw1535'] },
+  { name: 'Каркас+Тент MW 1535 h=1350', price: 1096, assembly: 23, models: ['mw1535'] },
+  { name: 'Каркас+Тент MW 1636 h=1500', price: 1256, assembly: 26, models: ['mw1636'] },
+  { name: 'Каркас+Тент MW 2035 PLAT h=1450', price: 1530, assembly: 32, models: ['mw2035'] },
+
+  // Викинг 1217
+  { name: 'Каркас+Тент Викинг 1217 h=300', price: 160, assembly: 10, models: ['viking1217'] },
+
+  // Викинг 1220
+  { name: 'Каркас+Тент Викинг 1220 h=300', price: 252, assembly: 10, models: ['viking1220'] },
+  { name: 'Каркас+Тент Викинг 1220 h=600', price: null, assembly: 10, models: ['viking1220'] },
+
+  // Викинг 1222
+  { name: 'Каркас+Тент Викинг 1222 h=300', price: 296, assembly: 10, models: ['viking1222'] },
+  { name: 'Каркас+Тент Викинг 1222 h=600', price: null, assembly: 10, models: ['viking1222'] },
+
+  // Викинг 1225
+  { name: 'Каркас+Тент Викинг 1225 h=300', price: 308, assembly: 10, models: ['viking1225'] },
+  { name: 'Каркас+Тент Викинг 1225 h=600', price: null, assembly: 10, models: ['viking1225'] },
+  { name: 'Каркас+Тент Викинг 1225 h=1000', price: 661, assembly: 14, models: ['viking1225'] },
+
+  // Викинг 1320
+  { name: 'Каркас+Тент Викинг 1320 h=300', price: 328, assembly: 10, models: ['viking1320'] },
+  { name: 'Каркас+Тент Викинг 1320 h=700', price: 524, assembly: 11, models: ['viking1320'] },
+  { name: 'Каркас+Тент Викинг 1320 h=800', price: 565, assembly: 12, models: ['viking1320'] },
+
+  // Викинг 1322
+  { name: 'Каркас+Тент Викинг 1322 h=300', price: 364, assembly: 10, models: ['viking1322'] },
+  { name: 'Каркас+Тент Викинг 1322 h=700', price: 541, assembly: 12, models: ['viking1322'] },
+  { name: 'Каркас+Тент Викинг 1322 h=800', price: 587, assembly: 12, models: ['viking1322'] },
+
+  // Викинг 1325
+  { name: 'Каркас+Тент Викинг 1325 h=300', price: 414, assembly: 10, models: ['viking1325'] },
+  { name: 'Каркас+Тент Викинг 1325 h=700', price: 566, assembly: 12, models: ['viking1325'] },
+  { name: 'Каркас+Тент Викинг 1325 h=800', price: 607, assembly: 13, models: ['viking1325'] },
+  { name: 'Каркас+Тент Викинг 1325 h=1000', price: 735, assembly: 15, models: ['viking1325'] },
+
+  // Викинг 1327
+  { name: 'Каркас+Тент Викинг 1327 h=800', price: 833, assembly: 17, models: ['viking1327'] },
+  { name: 'Каркас+Тент Викинг 1327 h=1000', price: 861, assembly: 18, models: ['viking1327'] },
+  { name: 'Каркас+Тент Викинг 1327 h=1200', price: 879, assembly: 18, models: ['viking1327'] },
+
+  // Викинг 1525
+  { name: 'Каркас+Тент Викинг 1525 h=1000', price: 836, assembly: 18, models: ['viking1525'] },
+  { name: 'Каркас+Тент Викинг 1525 h=1200', price: 908, assembly: 19, models: ['viking1525'] },
+
+  // Викинг 1530
+  { name: 'Каркас+Тент Викинг 1530 h=1000', price: 906, assembly: 19, models: ['viking1530'] },
+  { name: 'Каркас+Тент Викинг 1530 h=1200', price: 982, assembly: 21, models: ['viking1530'] },
+
+  // Викинг 1535
+  { name: 'Каркас+Тент Викинг 1535 h=1000', price: 1054, assembly: 22, models: ['viking1535'] },
+  { name: 'Каркас+Тент Викинг 1535 h=1350', price: 1152, assembly: 24, models: ['viking1535'] },
+
+  // Викинг 1835 / 2035
+  { name: 'Каркас+Тент Викинг 1835 h=1500', price: 1229, assembly: 26, models: ['viking1835'] },
+  { name: 'Каркас+Тент Викинг 2035 h=1500', price: 1543, assembly: 32, models: ['viking2035'] }
+];
+
+function rebuildKit(model){
+  kitSel.innerHTML = '';
+  const empty = document.createElement('option');
+  empty.value = '';
+  empty.textContent = '— без комплекта —';
+  kitSel.appendChild(empty);
+
+  let count = 0;
+  ALL_KITS.forEach(function(k){
+    if (model && k.models.indexOf(model) === -1) return;
+    const opt = document.createElement('option');
+    opt.value = k.name;
+    opt.textContent = k.name + (k.price == null ? ' — цена по запросу' : '');
+    if (k.price != null) opt.dataset.price = k.price;
+    if (k.assembly != null) opt.dataset.assembly = k.assembly;
+    kitSel.appendChild(opt);
+    count++;
+  });
+
+  kitCount.textContent = count;
+  kitSel.value = '';
+}
+
+function rebuildTentOnly(model){
+  Array.from(tentOnlySel.options).forEach(function(opt){
+    if (!opt.dataset.models) return;
+    const ok = !model || opt.dataset.models.split(' ').indexOf(model) !== -1;
+    opt.hidden = !ok;
+  });
+  tentOnlySel.value = '';
+}
+
+function calc(){
+  const tOpt = trailerSel.options[trailerSel.selectedIndex];
+  const kOpt = kitSel.options[kitSel.selectedIndex] || kitSel.options[0];
+  const oOpt = tentOnlySel.options[tentOnlySel.selectedIndex] || tentOnlySel.options[0];
+
+  const trailerPrice = num(tOpt.dataset.price);
+  const kitPrice = num(kOpt.dataset.price);
+  const tentOnlyPrice = num(oOpt.dataset.price);
+
+  const assembly = num(tOpt.dataset.assembly) + num(kOpt.dataset.assembly) + num(oOpt.dataset.assembly);
+  const delivery = num(tOpt.dataset.delivery);
+
+  const goods = trailerPrice + kitPrice + tentOnlyPrice;
+
+  document.getElementById('priceTrailer').textContent = money(trailerPrice);
+  document.getElementById('priceKit').textContent = money(kitPrice);
+  document.getElementById('priceTentOnly').textContent = money(tentOnlyPrice);
+  document.getElementById('totalGoods').textContent = money(goods);
+  document.getElementById('assembly').textContent = money(assembly);
+  document.getElementById('delivery').textContent = money(delivery);
+  document.getElementById('grandTotal').textContent = money(goods + assembly + delivery);
+}
+
+trailerSel.addEventListener('change', function(){
+  const tOpt = trailerSel.options[trailerSel.selectedIndex];
+  const model = tOpt.dataset.model || '';
+  rebuildKit(model);
+  rebuildTentOnly(model);
+  calc();
+});
+
+kitSel.addEventListener('change', calc);
+tentOnlySel.addEventListener('change', calc);
+
+// Начальное состояние
+rebuildKit('');
+rebuildTentOnly('');
+calc();
+</script>
+
+</body>
+</html>
